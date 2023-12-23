@@ -103,6 +103,8 @@ pub fn main() {
 
     let (our_args, rustc_args) = rust_verify::config::parse_args_with_imports(&program, args, vstd);
 
+    println!("use cvc: {}", our_args.use_cvc);
+
     if our_args.version {
         if our_args.output_json {
             println!(

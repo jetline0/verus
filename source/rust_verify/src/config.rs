@@ -64,6 +64,7 @@ pub struct ArgsX {
     pub smt_options: Vec<(String, String)>,
     pub multiple_errors: u32,
     pub expand_errors: bool,
+    pub use_cvc: bool,
     pub log_dir: Option<String>,
     pub log_all: bool,
     pub log_args: LogArgs,
@@ -145,6 +146,7 @@ pub fn parse_args_with_imports(
     const OPT_MULTIPLE_ERRORS: &str = "multiple-errors";
     const OPT_NO_VSTD: &str = "no-vstd";
     const OPT_EXPAND_ERRORS: &str = "expand-errors";
+    const OPT_USE_CVC: &str = "use-cvc";
 
     const OPT_LOG_DIR: &str = "log-dir";
     const OPT_LOG_ALL: &str = "log-all";
@@ -265,6 +267,7 @@ pub fn parse_args_with_imports(
         OPT_EXPAND_ERRORS,
         "When the proof fails, try to minimize the failing predicate",
     );
+    opts.optflag("", OPT_USE_CVC, "Use CVC5 instead of Z3");
     opts.optopt(
         "",
         OPT_LOG_DIR,
@@ -422,6 +425,7 @@ pub fn parse_args_with_imports(
             .unwrap_or_else(|_| error("expected integer after multiple-errors".to_string()))
             .unwrap_or(2),
         expand_errors: matches.opt_present(OPT_EXPAND_ERRORS),
+        use_cvc: matches.opt_present(OPT_USE_CVC),
         log_dir: matches.opt_str(OPT_LOG_DIR),
         log_all: matches.opt_present(OPT_LOG_ALL),
         log_args: LogArgs {
