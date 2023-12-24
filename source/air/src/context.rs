@@ -215,6 +215,13 @@ impl Context {
         self.smt_log.log_set_option(option, value);
     }
 
+    pub fn log_set_cvc_logic(&mut self, logic: &str) {
+        self.air_initial_log.log_set_logic(logic);
+        self.air_middle_log.log_set_logic(logic);
+        self.air_final_log.log_set_logic(logic);
+        self.smt_log.log_set_logic(logic);
+    }
+
     pub(crate) fn set_z3_param_bool(&mut self, option: &str, value: bool, write_to_logs: bool) {
         if option == "air_recommended_options" && value {
             self.set_z3_param_bool("auto_config", false, true);

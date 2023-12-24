@@ -995,13 +995,21 @@ impl Verifier {
         }
 
         // air_recommended_options causes AIR to apply a preset collection of Z3 options
-        air_context.set_z3_param("air_recommended_options", "true");
-        self.set_default_rlimit(&mut air_context);
-        for (option, value) in self.args.smt_options.iter() {
-            air_context.set_z3_param(&option, &value);
+        if !self.args.use_cvc {
+            air_context.set_z3_param("air_recommended_options", "true");
+            self.set_default_rlimit(&mut air_context);
+            for (option, value) in self.args.smt_options.iter() {
+                air_context.set_z3_param(&option, &value);
+            }
+
+            air_context.blank_line();
         }
 
-        air_context.blank_line();
+        // set-logic is required for CVC
+        if self.args.use_cvc {
+            air_context.log_set_cvc_logic("ALL");
+        }
+
         air_context.comment("Prelude");
         for command in vir::context::Ctx::prelude(prelude_config).iter() {
             Self::check_internal_result(air_context.command(

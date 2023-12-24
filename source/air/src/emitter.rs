@@ -101,6 +101,14 @@ impl Emitter {
         }
     }
 
+    pub fn log_set_logic(&mut self, logic: &str) {
+        if !self.is_none() {
+            self.log_node(&node!(
+                (set-logic {Node::Atom(logic.to_string())})
+            ));
+        }
+    }
+
     pub fn log_get_info(&mut self, param: &str) {
         if !self.is_none() {
             self.log_node(&node!(
